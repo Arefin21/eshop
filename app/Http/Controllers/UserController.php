@@ -29,11 +29,16 @@ class UserController extends Controller {
     public function VerifyLogin(Request $request): JsonResponse {
         $UserEmail = $request->UserEmail;
         $OTP = $request->OTP;
+        //Verify OTP and get user
         $verification = User::where('email', $UserEmail)->where('otp', $OTP)->first();
 
         if ($verification) {
-            User::where('email', $UserEmail)->where('otp', $OTP)->update(['otp' => '0']);
-            $token = JWTToken::CreateToken($UserEmail, $verification->id);
+            // Update OTP and create JWT token
+            $user = User::where('email', $UserEmail)->where('otp', $OTP)->update(['otp' => '0']);
+            $token = JWTToken::CreateToken($UserEmail, $user->id);
+            // $token = JWTToken::CreateToken('test@example.com', 123);
+            // dd($token);
+
             return ResponseHelper::Out('success', "", 200)->cookie('token', $token, 60 * 24 * 30);
 
         } else {

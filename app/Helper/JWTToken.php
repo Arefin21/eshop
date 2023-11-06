@@ -25,7 +25,7 @@ class JWTToken {
 
         try {
             if ($token == null) {
-                return 'Unauthorizes';
+                return 'Unauthorized';
             } else {
                 $key = env('JWT_KEY');
                 return JWT::decode($token, new Key($key, 'HS256'));
