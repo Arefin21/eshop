@@ -1,13 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Middleware\TokenAuthenticate;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\TokenAuthenticate;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -27,10 +27,14 @@ Route::get("/PolicyByType/{type}", [PolicyController::class, 'PolicyByType']);
 
 //User Auth
 Route::get('/UserLogin/{UserEmail}', [UserController::class, 'UserLogin']);
-Route::get('/VerifyLogin/{UserEmail}/{otp}', [UserController::class, 'VerifyLogin']);
+Route::get('/VerifyLogin/{UserEmail}/{OTP}', [UserController::class, 'VerifyLogin']);
 Route::get('/logout', [UserController::class, 'UserLogout']);
 
 //User Profile
 
 Route::post('/CreateProfile', [ProfileController::class, 'CreateProfile'])->middleware([TokenAuthenticate::class]);
 Route::get('/ReadProfile', [ProfileController::class, 'ReadProfile'])->middleware([TokenAuthenticate::class]);
+
+//Product Review
+
+Route::post('/CreateProductReview',[ProductController::class,'CreateProductReview'])->middleware([TokenAuthenticate::class]);

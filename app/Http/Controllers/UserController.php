@@ -19,7 +19,7 @@ class UserController extends Controller {
             $OTP = rand(100000, 999999);
             $details = ['code' => $OTP];
             Mail::to($UserEmail)->send(new OTPMail($details));
-            $data = User::updateOrCreate(['email' => $UserEmail], ['email' => $UserEmail, 'otp' => $OTP]);
+            User::updateOrCreate(['email' => $UserEmail], ['email' => $UserEmail, 'otp' => $OTP]);
             return ResponseHelper::Out('success', "A 6 Digit OTP has been send to your email address", 200);
         } catch (Exception $e) {
             return ResponseHelper::Out('fail', $e, 200);
@@ -29,18 +29,13 @@ class UserController extends Controller {
     public function VerifyLogin(Request $request): JsonResponse {
         $UserEmail = $request->UserEmail;
         $OTP = $request->OTP;
-        //Verify OTP and get user
+
         $verification = User::where('email', $UserEmail)->where('otp', $OTP)->first();
 
         if ($verification) {
-            // Update OTP and create JWT token
-            $user = User::where('email', $UserEmail)->where('otp', $OTP)->update(['otp' => '0']);
-            $token = JWTToken::CreateToken($UserEmail, $user->id);
-            // $token = JWTToken::CreateToken('test@example.com', 123);
-            // dd($token);
-
+            User::where('email', $UserEmail)->where('otp', $OTP)->update(['otp' => '0']);
+            $token = JWTToken::CreateToken($UserEmail, $verification->id);
             return ResponseHelper::Out('success', "", 200)->cookie('token', $token, 60 * 24 * 30);
-
         } else {
             return ResponseHelper::Out('fail', null, 401);
         }
