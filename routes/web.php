@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PolicyController;
-use App\Http\Middleware\TokenAuthenticate;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\TokenAuthenticate;
+use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -37,4 +37,16 @@ Route::get('/ReadProfile', [ProfileController::class, 'ReadProfile'])->middlewar
 
 //Product Review
 
-Route::post('/CreateProductReview',[ProductController::class,'CreateProductReview'])->middleware([TokenAuthenticate::class]);
+Route::post('/CreateProductReview', [ProductController::class, 'CreateProductReview'])->middleware([TokenAuthenticate::class]);
+
+//Product Wish
+
+Route::get('/ProductWishList', [ProductController::class, 'ProductWishList'])->middleware([TokenAuthenticate::class]);
+Route::get('/CreateWishList/{product_id}', [ProductController::class, 'CreateWishList'])->middleware([TokenAuthenticate::class]);
+Route::get('/RemoveWishList/{product_id}', [ProductController::class, 'RemoveWishList'])->middleware([TokenAuthenticate::class]);
+
+//Product Cart
+
+Route::post('/CreateCartList', [ProductController::class, 'CreateCartList'])->middleware([TokenAuthenticate::class]);
+Route::get('/CartList', [ProductController::class, 'CartList'])->middleware([TokenAuthenticate::class]);
+Route::get('/DeleteCreateCartList/{product_id}', [ProductController::class, 'DeleteCreateCartList'])->middleware([TokenAuthenticate::class]);
