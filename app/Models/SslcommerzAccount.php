@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SslcommarzAccount extends Model
-{
+class SslcommerzAccount extends Model {
     use HasFactory;
 }
